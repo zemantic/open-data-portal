@@ -3,9 +3,10 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\Keyword;
+use App\Models\Dataset;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -13,10 +14,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            //
-            $table->unsignedBigInteger('user_state')->default(6);
-            $table->foreign('user_state')->references('id')->on('user_states');
+        Schema::create("datasets_keywords", function (Blueprint $table) {
+            $table->id();
+            $table->foreignIdFor(Dataset::class);
+            $table->foreignIdFor(Keyword::class);
+            $table->timestamps();
         });
     }
 
@@ -27,5 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists("datasets_keywords");
     }
 };

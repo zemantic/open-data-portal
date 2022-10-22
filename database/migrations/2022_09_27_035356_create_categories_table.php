@@ -13,10 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            //
-            $table->unsignedBigInteger('user_state')->default(6);
-            $table->foreign('user_state')->references('id')->on('user_states');
+        Schema::create('categories', function (Blueprint $table) {
+            $table->id();
+            $table->string('category');
+            $table->timestamps();
         });
     }
 
@@ -27,5 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('categories');
     }
 };
