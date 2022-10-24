@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DatasetsController;
+use App\Http\Controllers\OrganizationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,16 +15,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get("/", function () {
+    return view("welcome");
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::get("/dashboard", function () {
+    return view("dashboard");
+})
+    ->middleware(["auth"])
+    ->name("dashboard");
 
-Route::get('/deposit-research', function() {
-    return view('depositResearch');
+Route::resource("datasets", DatasetsController::class);
+
+Route::get("/deposit", function () {
+    return view("depositDataset");
 });
 
-require __DIR__.'/auth.php';
+Route::resource("organization", OrganizationController::class);
+
+require __DIR__ . "/auth.php";
