@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Organizations;
+use App\Models\Organization;
 use Illuminate\Http\Request;
 
 class OrganizationController extends Controller
@@ -14,7 +14,6 @@ class OrganizationController extends Controller
      */
     public function index()
     {
-        //
     }
 
     /**
@@ -24,7 +23,7 @@ class OrganizationController extends Controller
      */
     public function create()
     {
-        return view("organizationView");
+        return view("organizationView", ["mode" => "create"]);
     }
 
     /**
@@ -35,41 +34,77 @@ class OrganizationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            "orgName" => "required",
+            "address" => "required",
+            "email" => "required",
+            "phoneNumber" => "required",
+        ]);
+
+        $organization = new Organization();
+        $organization->name = $request->orgName;
+        $organization->address = $request->address;
+        $organization->city = $request->city;
+        $organization->state = $request->state;
+        $organization->zip = $request->zip;
+        $organization->email = $request->email;
+        $organization->phoneNumber = $request->phoneNumber;
+        $organization->save();
+        print $organization->id;
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Organizations  $organizations
+     * @param  \App\Models\Organization  $organization
      * @return \Illuminate\Http\Response
      */
-    public function show(Organizations $organizations)
+    public function show(Organization $organization)
     {
-        //
+        echo $organization->id;
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Organizations  $organizations
+     * @param  \App\Models\Organization  $organization
      * @return \Illuminate\Http\Response
      */
-    public function edit(Organizations $organizations)
+    public function edit(Organization $organization)
     {
         //
+        return view("organizationView", [
+            "organization" => $organization,
+            "mode" => "edit",
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Organizations  $organizations
+     * @param  \App\Models\Organization  $organizations
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Organizations $organizations)
+    public function update(Request $request, Organization $organization)
     {
         //
+        $validated = $request->validate([
+            "orgName" => "required",
+            "address" => "required",
+            "email" => "required",
+            "phoneNumber" => "required",
+        ]);
+
+        $organization->name = $request->orgName;
+        $organization->address = $request->address;
+        $organization->city = $request->city;
+        $organization->state = $request->state;
+        $organization->zip = $request->zip;
+        $organization->email = $request->email;
+        $organization->phoneNumber = $request->phoneNumber;
+        $organization->save();
+        print $organization->id;
     }
 
     /**
