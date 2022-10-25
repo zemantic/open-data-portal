@@ -11,8 +11,7 @@ if ($type == 'success') {
 @endphp
 
 <span @class([
-    'p-4 block rounded-lg mb-4',
-    'font-bold' => $success,
+    'p-4 block rounded-lg mb-4 font-bold',
     'text-red-700' => $error,
     'bg-red' => $error,
     'bg-green-200' => $success,
