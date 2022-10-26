@@ -85,6 +85,7 @@ class DatasetsController extends Controller
             array_push($file_data_array, $new_file->id);
         }
         $dataset->files()->attach($file_data_array);
+        $dataset->save();
         print $dataset->id;
     }
 
