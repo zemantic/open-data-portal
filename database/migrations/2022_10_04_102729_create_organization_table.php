@@ -12,7 +12,7 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create("organization", function (Blueprint $table) {
+        Schema::create("organizations", function (Blueprint $table) {
             $table->id();
             $table->string("name");
             $table->string("address")->nullable();
@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->string("district")->nullable();
             $table->string("state")->nullable();
             $table->string("zip")->nullable();
+            $table->string("email")->nullable();
             $table->string("phoneNumber")->nullable();
             $table->boolean("retired")->default(false);
             $table->timestamps();
@@ -33,6 +34,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists("organization");
+        Schema::dropIfExists("organizations");
     }
 };
