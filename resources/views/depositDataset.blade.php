@@ -18,8 +18,13 @@
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8" x-data="fileUploadComponent()">
       <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
         <div class="p-6 bg-white border-b border-gray-200">
-          <h2 class="font-bold text-2xl">Desposit Your Dataset</h2>
-          <form action="/datasets" enctype="multipart/form-data" method="post" class="grid grid-cols-2 gap-6 py-4">
+          <!-- TODO: Add notification element -->
+          <h2 class="font-bold text-2xl">Desposit A Dataset</h2>
+          <form action="/datasets/{{ $dataset->id ?? '' }}" enctype="multipart/form-data" method="post"
+            class="grid grid-cols-2 gap-6 py-4">
+            @if ($mode == 'edit')
+              @method('PUT')
+            @endif
             @csrf
             <div class="space-y-4">
               <div class="control">
@@ -74,10 +79,46 @@
                   @click="fileuploadclick()">Select files</button>
               </div>
             </div>
-            <x-button class="font-bold">
-              {{ __('Upload Dataset') }}
-            </x-button>
+            <div>
+              <x-button class="font-bold">
+                {{ __('Deposit Dataset') }}
+              </x-button>
+
+              <x-button type="button" @click="showDelete = !showDelete"
+                class="font-bold bg-red-600 focus:bg-red-600 active:bg-red-600 hover:bg-red-500">
+                {{ __('Delete Dataset') }}
+              </x-button>
+
+            </div>
           </form>
+
+          <div x-show="showDelete" x-transition class="shadow rounded-lg border py-5 px-4 flex items-center mt-4">
+            <span class="h-16 w-16 block mr-4">
+              <svg enable-background="new 0 0 512 512" id="Layer_1" version="1.1" viewBox="0 0 512 512"
+                xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <linearGradient gradientUnits="userSpaceOnUse" id="SVGID_1_" x1="256" x2="256"
+                  y1="512" y2="-9.094947e-013">
+                  <stop offset="0" style="stop-color:#E73827" />
+                  <stop offset="1" style="stop-color:#F85032" />
+                </linearGradient>
+                <circle cx="256" cy="256" fill="url(#SVGID_1_)" r="256" />
+                <path
+                  d="M268.7,256l119.6-119.6c3.2-3.2,3.2-8.3,0-11.4c-3.2-3.2-8.3-3.2-11.4,0L257.2,244.6L135.1,122.5  c-3.2-3.2-8.3-3.2-11.4,0c-3.2,3.2-3.2,8.3,0,11.4L245.8,256L123.7,378.1c-3.2,3.2-3.2,8.3,0,11.4c1.6,1.6,3.7,2.4,5.7,2.4  c2.1,0,4.1-0.8,5.7-2.4l122.1-122.1l119.6,119.6c1.6,1.6,3.7,2.4,5.7,2.4c2.1,0,4.1-0.8,5.7-2.4c3.2-3.2,3.2-8.3,0-11.4L268.7,256z"
+                  fill="#FFFFFF" />
+              </svg>
+            </span>
+            <div>
+              <p class="font-bold">Are you sure to delete this dataset? <span class="text-red-700">This action cannot
+                  be undone</span></p>
+              <form action="/dataset/{{ $dataset->id ?? '' }}">
+                @method('DELETE')
+                @csrf
+                <x-button class="font-bold text-xs bg-red-600 focus:bg-red-600 active:bg-red-600 hover:bg-red-500">
+                  {{ __('Confirm and delete') }}
+                </x-button>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -96,6 +137,7 @@
       description: "",
       keywords: "",
       categories: "",
+      showDelete: false,
       fileList: [],
       fileuploadclick() {
         return this.$refs.fileUploadInput.click()
