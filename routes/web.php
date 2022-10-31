@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DatasetsController;
 use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\UsergroupController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +27,8 @@ Route::get("/dashboard", function () {
     ->name("dashboard");
 
 Route::resource("datasets", DatasetsController::class);
+
+Route::resource("usergroups", UsergroupController::class);
 
 Route::get("/deposit", function () {
     return view("depositDataset");
