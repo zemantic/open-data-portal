@@ -5,9 +5,6 @@
   @if ($mode == 'edit')
     @section('title', 'Editing organization ' . $organization->name)
   @endif
-  @if ($mode == 'create')
-    @section('title', 'Create new organization')
-  @endif
   <x-slot name="header">
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
       {{ __('Organization') }}
