@@ -57,4 +57,39 @@ class RegisteredUserController extends Controller
 
         return redirect(RouteServiceProvider::HOME);
     }
+
+    /**
+     * Handle updating user account
+     * @param \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\User $user
+     * @return \Illuminate\Http\RedirectResponse
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function update(Request $request, User $user)
+    {
+        $request->validate([
+            "name" => ["required", "string", "max:255"],
+            "email" => [
+                "required",
+                "string",
+                "email",
+                "max:255",
+                "unique:users",
+            ],
+            "password" => ["required", "confirmed", Rules\Password::defaults()],
+        ]);
+
+        print $user->id;
+    }
+
+    /**
+     * Show the form to update a user profile
+     *
+     * @return Illuminate\Http\Response
+     */
+    public function updateProfile()
+    {
+        return view("settings.updateprofile");
+    }
 }
