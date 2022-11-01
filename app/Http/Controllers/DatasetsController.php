@@ -28,6 +28,7 @@ class DatasetsController extends Controller
      */
     public function create()
     {
+        return view("depositDataset", ["mode" => "create"]);
     }
 
     /**
@@ -80,9 +81,10 @@ class DatasetsController extends Controller
             $new_file->filepath = $path;
             $new_file->filetype = $file->getMimeType();
             $new_file->save();
-            array_push($file_data_array);
+            array_push($file_data_array, $new_file->id);
         }
-
+        $dataset->files()->attach($file_data_array);
+        $dataset->save();
         print $dataset->id;
     }
 
@@ -114,7 +116,10 @@ class DatasetsController extends Controller
      */
     public function edit(Dataset $datasetsModel)
     {
-        //
+        return view("depositDataset", [
+            "mode" => "edit",
+            "dataset" => $dataset,
+        ]);
     }
 
     /**
@@ -127,6 +132,33 @@ class DatasetsController extends Controller
     public function update(Request $request, Dataset $datasetsModel)
     {
         //
+        $validated = $request->validate([
+            "title" => "required",
+            "description" => "required",
+            "categories" => "required",
+            "keywords" => "required",
+            "files" => "required|mimes:csv,txt,xlsx,xls,pdf,json|max:10024",
+        ]);
+
+        $keywords = explode(",", $request->keywords);
+
+        foreach ($keywords as $key => $value) {
+            $find_keyword = Keywords::where("keyword", $value)->first();
+            if ($find_keyword == null) {
+                $new_key = new Keywords();
+                $new_key->keyword = $value;
+                $new_key->save();
+                array_push($keyword_array, $new_key->id);
+            } else {
+                array_push($keyword_array, $find_keyword->id);
+            }
+
+            $dataset->title = $request->title;
+            $dataset->description = $request->description;
+            $dataset->keywords()->attach($keyword_array);
+            $dataset->categories()->attach([$request->categories]);
+            $dataset->save();
+        }
     }
 
     /**
