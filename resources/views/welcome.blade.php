@@ -1,14 +1,25 @@
 <x-frontend-layout>
   <div class="bg-blue-900 py-8 px-4 md:px-0">
-    <div class="container mx-auto">
+    <div class="container max-w-7xl mx-auto">
       <h1 class="text-3xl text-white">Offical Open Data Portal for The Ministry of Health Sri Lanka</h1>
+      <div class="mt-4 gap-4 font-bold text-white">
+        <ul class="md:flex items-center text-base text-white md:pt-0">
+          <li><a class="inline-block no-underline font-bold px-4 lg:-ml-2" href="#">Home</a></li>
+          <li><a class="inline-block no-underline font-bold px-4 lg:-ml-2" href="#">Datasets</a>
+          </li>
+          <li><a class="inline-block no-underline font-bold px-4 lg:-ml-2" href="#">Documentation</a></li>
+          <li><a class="inline-block no-underline font-bold px-4 lg:-ml-2" href="#">Contact</a></li>
+        </ul>
+      </div>
     </div>
   </div>
   <div class="bg-gray-200 py-8">
-    <div class="container mx-auto">
+    <div class="container max-w-7xl mx-auto">
       <div class="bg-white p-8">
         <form action="/search" class="flex" method="post">
-          <input type="text" class="border-2 block w-full border-blue-800 px-3 py-2 h-12" placeholder="Search" />
+          @csrf
+          <input type="text" class="border-2 block w-full border-blue-800 px-3 py-2 h-12" placeholder="Search"
+            name="keyword" />
           <button class="p-3 bg-blue-800 hover:bg-blue-900 h-12 w-12 fill-white flex items-center">
             <svg height="36" viewBox="0 0 48 48" width="36" xmlns="http://www.w3.org/2000/svg">
               <path
@@ -20,16 +31,40 @@
       </div>
     </div>
   </div>
+
+  <div class="bg-white py-8">
+    <div class="max-w-7xl mx-auto grid grid-cols-3 gap-4 bg-slate-100 p-12">
+      <div>
+        <h1 class="text-4xl font-bold">0</h1>
+        <h2 class="text-xl">Datasets</h2>
+      </div>
+      <div>
+        <h1 class="text-4xl font-bold">0</h1>
+        <h2 class="text-xl">Categories</h2>
+      </div>
+      <div>
+        <h1 class="text-4xl font-bold">0</h1>
+        <h2 class="text-xl">Downloads</h2>
+      </div>
+    </div>
+  </div>
+
   <div class="bg-blue-900 py-16" id="footer">
-    <div class="container mx-auto">
+    <div class="container mx-auto max-w-7xl">
       <div class="grid grid-cols-3 gap-4">
-        <div></div>
+        <div>
+          <h4 class="font-bold text-white">Data.health</h4>
+          <p class="text-blue-300">This website is maintained by the Health Information unit, Ministry of Health Sri
+            Lanka</p>
+        </div>
         <div></div>
         <div>
+
+          <h4 class="font-bold text-white">Useful links</h4>
           <a href="#" class="fill-white text-white flex items-center">
-            <span>
-              <svg height="36px" id="Layer_1" style="enable-background:new 0 0 512 512;" version="1.1"
-                viewBox="0 0 512 512" width="36px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
+            <span class="mr-2">
+              <svg height="24px" id="Layer_1" style="enable-background:new 0 0 512 512;" version="1.1"
+                viewBox="0 0 512 512" width="24px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg"
                 xmlns:xlink="http://www.w3.org/1999/xlink">
                 <style type="text/css">
                   <![CDATA[
@@ -50,6 +85,5 @@
         </div>
       </div>
     </div>
-
   </div>
 </x-frontend-layout>
