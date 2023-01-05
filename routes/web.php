@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DatasetsController;
 use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\SearchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +19,10 @@ use App\Http\Controllers\OrganizationController;
 Route::get("/", function () {
     return view("welcome");
 });
+
+Route::post("/search", [SearchController::class, "search"]);
+
+Route::get("/search", [SearchController::class, "search"]);
 
 Route::get("/dashboard", function () {
     return view("dashboard");

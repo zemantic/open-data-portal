@@ -18,7 +18,6 @@ class DatasetsController extends Controller
      */
     public function index()
     {
-        //
     }
 
     /**
@@ -28,6 +27,7 @@ class DatasetsController extends Controller
      */
     public function create()
     {
+        return view("depositDataset", ["mode" => "create"]);
     }
 
     /**
