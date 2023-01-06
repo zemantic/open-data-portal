@@ -15,10 +15,13 @@ class SearchController extends Controller
         ]);
 
         $keyword = $request->keyword;
-        $datasets = Dataset::where("title", "LIKE", "%" . $keyword . "%")
-            ->orWhere("description", "LIKE", "%" . $keyword . "%")
-            ->get();
+        // echo $keyword;
+        // return;
+        // $datasets = Dataset::where("title", "LIKE", "%" . $keyword . "%")
+        //     ->orWhere("description", "LIKE", "%" . $keyword . "%")
+        //     ->get();
 
-        return view("searchResults", ["datasets" => $datasets]);
+        // return view("searchResults", ["datasets" => $datasets]);
+        return view("searchResults");
     }
 }

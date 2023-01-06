@@ -46,11 +46,15 @@ class OrganizationController extends Controller
         $organization->address = $request->address;
         $organization->city = $request->city;
         $organization->state = $request->state;
+        $organization->district = $request->district;
         $organization->zip = $request->zip;
         $organization->email = $request->email;
         $organization->phoneNumber = $request->phoneNumber;
         $organization->save();
-        print $organization->id;
+        return redirect()->action(
+            [OrganizationController::class, "edit"],
+            ["organization" => $organization->id]
+        );
     }
 
     /**
@@ -100,11 +104,14 @@ class OrganizationController extends Controller
         $organization->address = $request->address;
         $organization->city = $request->city;
         $organization->state = $request->state;
+        $organization->district = $request->district;
         $organization->zip = $request->zip;
         $organization->email = $request->email;
         $organization->phoneNumber = $request->phoneNumber;
         $organization->save();
-        print $organization->id;
+        return redirect()
+            ->back()
+            ->with("message", "Organization updated successfully");
     }
 
     /**
