@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Model\Download;
 
 class File extends Model
 {
@@ -12,5 +13,9 @@ class File extends Model
     public function dataset()
     {
         return $this->blongsTo(Dataset::class);
+    }
+    public function download()
+    {
+        return $this->hasMany(Download::class);
     }
 }
