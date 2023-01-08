@@ -14,7 +14,7 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create("datasets_keywords", function (Blueprint $table) {
+        Schema::create("dataset_keyword", function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Dataset::class);
             $table->foreignIdFor(Keyword::class);
@@ -29,6 +29,6 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists("datasets_keywords");
+        Schema::dropIfExists("dataset_keyword");
     }
 };
