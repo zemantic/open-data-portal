@@ -14,7 +14,7 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create("categories_datasets", function (Blueprint $table) {
+        Schema::create("category_dataset", function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Dataset::class);
             $table->foreignIdFor(Category::class);
