@@ -51,9 +51,9 @@ class DatasetsController extends Controller
         $keyword_array = [];
 
         foreach ($keywords as $key => $value) {
-            $find_keyword = Keywords::where("keyword", $value)->first();
+            $find_keyword = Keyword::where("keyword", $value)->first();
             if ($find_keyword == null) {
-                $new_key = new Keywords();
+                $new_key = new Keyword();
                 $new_key->keyword = $value;
                 $new_key->save();
                 array_push($keyword_array, $new_key->id);
@@ -65,7 +65,7 @@ class DatasetsController extends Controller
         $files = $request->files;
         $file_data_array = [];
 
-        $dataset = new Datasets();
+        $dataset = new Dataset();
         $dataset->title = $request->title;
         $dataset->description = $request->description;
         $dataset->uuid = Str::uuid();
@@ -73,17 +73,18 @@ class DatasetsController extends Controller
         $dataset->save();
         $dataset->keywords()->attach($keyword_array);
         $dataset->categories()->attach([$request->categories]);
+        $dataset->save();
 
         foreach ($request->file() as $file) {
             $path = $file->store("uploads");
-            $new_file = new Files();
+            $new_file = new File();
             $new_file->filepath = $path;
             $new_file->filetype = $file->getMimeType();
+            $new_file->dataset_id = $dataset->id;
             $new_file->save();
             array_push($file_data_array, $new_file->id);
         }
         $dataset->files()->attach($file_data_array);
-        $dataset->save();
         print $dataset->id;
     }
 
@@ -96,7 +97,12 @@ class DatasetsController extends Controller
     public function show(Dataset $datasetsModel, $slug)
     {
         //
-        $dataset = $datasetsModel::find($slug);
+        $dataset = $datasetsModel::where("uuid", $slug)->first();
+
+        if ($dataset == null) {
+            return abort(404);
+        }
+
         $user = $dataset->user;
         $files = $dataset->files;
 
@@ -144,7 +150,7 @@ class DatasetsController extends Controller
         foreach ($keywords as $key => $value) {
             $find_keyword = Keywords::where("keyword", $value)->first();
             if ($find_keyword == null) {
-                $new_key = new Keywords();
+                $new_key = new Keyword();
                 $new_key->keyword = $value;
                 $new_key->save();
                 array_push($keyword_array, $new_key->id);
