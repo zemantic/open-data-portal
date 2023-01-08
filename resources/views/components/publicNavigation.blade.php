@@ -4,8 +4,8 @@
   <div class="inline-flex">
     <a class="_o6689fn" href="/">
       <div class="hidden items-center gap-2 md:flex">
-        <img src="/logo.png" alt="" class="h-12">
-        <h1 class="font-light text-xl">Open data portal</h1>
+        <x-application-logo class="h-12" />
+        <h1 class="text-xl font-bold capitalize">Open data portal</h1>
       </div>
       <div class="block md:hidden">
         <img src="/logo.png" alt="" class="h-12">
@@ -22,9 +22,11 @@
         <button @click="$refs.txtSearchBox.focus()"
           class="flex items-center focus-within:border-indigo-600 flex-grow-0 flex-shrink pl-2 relative w-96 border-2 rounded-full px-1  py-1"
           type="button">
-          <input x-ref="txtSearchBox"
-            class="block flex-grow flex-shrink overflow-hidden bg-transparent focus:outline-none px-3 py-2"
-            placeholder="Search" />
+          <form action="/search" class="w-full">
+            <input x-ref="txtSearchBox" name="keyword"
+              class="block flex-grow w-full overflow-hidden bg-transparent focus:outline-none px-3 py-2"
+              placeholder="Search" />
+          </form>
           <div class="flex items-center justify-center relative  h-8 w-8 rounded-full">
             <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="presentation"
               focusable="false"
