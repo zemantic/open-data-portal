@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DatasetsController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\DownloadController;
+use App\Http\Controllers\HomepageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,9 +18,7 @@ use App\Http\Controllers\SearchController;
 |
 */
 
-Route::get("/", function () {
-    return view("welcome");
-});
+Route::get("/", [HomepageController::class, "index"]);
 
 Route::post("/search", [SearchController::class, "search"]);
 
@@ -29,6 +29,8 @@ Route::get("/dashboard", function () {
 })
     ->middleware(["auth"])
     ->name("dashboard");
+
+Route::get("/download/{id}", [DownloadController::class, "downloadDataset"]);
 
 Route::resource("datasets", DatasetsController::class);
 
