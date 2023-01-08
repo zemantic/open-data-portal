@@ -18,7 +18,7 @@
 
 <body class="font-sans antialiased">
   <div class="min-h-screen bg-gray-100">
-    @include('layouts.navigation')
+    @include('components.navigation')
 
     <!-- Page Heading -->
     <header class="bg-white shadow">
