@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Dataset;
 use App\Models\File;
 use App\Models\Keyword;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
@@ -27,7 +28,22 @@ class DatasetsController extends Controller
      */
     public function create()
     {
-        return view("depositDataset", ["mode" => "create"]);
+        $categories = Category::get();
+        $category_options = [];
+        array_push($category_options, [
+            "value" => null,
+            "valueText" => "Please select category",
+        ]);
+        foreach ($categories as $category) {
+            array_push($category_options, [
+                "value" => $category->id,
+                "valueText" => $category->category,
+            ]);
+        }
+        return view("depositDataset", [
+            "mode" => "create",
+            "categories" => $category_options,
+        ]);
     }
 
     /**
