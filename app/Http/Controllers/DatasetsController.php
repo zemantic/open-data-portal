@@ -136,10 +136,28 @@ class DatasetsController extends Controller
      * @param  \App\Models\Dataset  $datasetsModel
      * @return \Illuminate\Http\Response
      */
-    public function edit(Dataset $datasetsModel)
+    public function edit(Dataset $datasetsModel, $id)
     {
+        $dataset = Dataset::find($id);
+        if ($dataset === null) {
+            return abort(404);
+        }
+
+        $categories = Category::get();
+        $category_options = [];
+        array_push($category_options, [
+            "value" => null,
+            "valueText" => "Please select a category",
+        ]);
+        foreach ($categories as $category) {
+            array_push($category_options, [
+                "value" => $category->id,
+                "valueText" => $category->category,
+            ]);
+        }
         return view("depositDataset", [
-            "mode" => "edit",
+            "mode" => "patch",
+            "categories" => $category_options,
             "dataset" => $dataset,
         ]);
     }
