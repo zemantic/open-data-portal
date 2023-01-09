@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\Category;
 
 return new class extends Migration {
     /**
@@ -12,10 +13,8 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create("categories", function (Blueprint $table) {
-            $table->id();
-            $table->string("category");
-            $table->timestamps();
+        Schema::table("categories", function (Blueprint $table) {
+            $table->foreignIdFor(Category::class)->nullable();
         });
     }
 
@@ -26,6 +25,8 @@ return new class extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists("categories");
+        Schema::table("categories", function (Blueprint $table) {
+            //
+        });
     }
 };

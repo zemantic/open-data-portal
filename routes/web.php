@@ -6,6 +6,7 @@ use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\HomepageController;
+use App\Http\Controllers\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,5 +40,5 @@ Route::get("/deposit", function () {
 });
 
 Route::resource("organization", OrganizationController::class);
-
+Route::resource("category", CategoryController::class);
 require __DIR__ . "/auth.php";
