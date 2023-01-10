@@ -2,9 +2,8 @@
     <div class="container mx-auto max-w-7xl">
       <div class="grid grid-cols-3 gap-4">
         <div>
-          <h4 class="font-bold text-white">Data.health</h4>
-          <p class="text-blue-300">This website is maintained by the Health Information unit, Ministry of Health Sri
-            Lanka</p>
+          <h4 class="font-bold text-white">Open Data Portal</h4>
+          <p class="text-blue-300">This is the official Open Data Portal of Ministry of Health Sri Lanka</p>
         </div>
         <div></div>
         <div>
