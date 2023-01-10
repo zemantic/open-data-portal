@@ -19,15 +19,14 @@ updates:
       prefix: "composer"
       
   - package-ecosystem: "npm"
-      directory: "/"
-      schedule:
-        interval: "weekly"
-      assignees:
-        - "rukshn"
-      labels:
-        - "npm"
-        - "package.json"
-        - "dependencies"
-      commit-message:
-        # Prefix all commit messages with "npm"
-        prefix: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    assignees:
+      - "rukshn"
+    labels:
+      - "npm"
+      - "dependencies"
+    commit-message:
+      # Prefix all commit messages with "npm"
+      prefix: "npm"
