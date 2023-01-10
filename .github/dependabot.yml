@@ -17,3 +17,16 @@ updates:
     commit-message:
       # Prefix all commit messages with "npm"
       prefix: "composer"
+      
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    assignees:
+      - "rukshn"
+    labels:
+      - "npm"
+      - "dependencies"
+    commit-message:
+      # Prefix all commit messages with "npm"
+      prefix: "npm"
