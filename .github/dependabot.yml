@@ -26,6 +26,7 @@ updates:
         - "rukshn"
       labels:
         - "npm"
+        - "package.json"
         - "dependencies"
       commit-message:
         # Prefix all commit messages with "npm"
