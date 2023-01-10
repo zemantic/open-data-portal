@@ -37,8 +37,8 @@ Route::resource("datasets", DatasetsController::class);
 
 Route::get("/deposit", function () {
     return view("depositDataset");
-});
+})->middleware(["auth"]);
 
 Route::resource("organization", OrganizationController::class);
-Route::resource("category", CategoryController::class);
+Route::resource("category", CategoryController::class)->middleware(["auth"]);
 require __DIR__ . "/auth.php";
