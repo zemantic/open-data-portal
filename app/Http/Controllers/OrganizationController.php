@@ -51,10 +51,12 @@ class OrganizationController extends Controller
         $organization->email = $request->email;
         $organization->phoneNumber = $request->phoneNumber;
         $organization->save();
-        return redirect()->action(
-            [OrganizationController::class, "edit"],
-            ["organization" => $organization->id]
-        );
+        return redirect()
+            ->action(
+                [OrganizationController::class, "edit"],
+                ["organization" => $organization->id]
+            )
+            ->with("message", "Organization created");
     }
 
     /**
