@@ -2,7 +2,6 @@
   @include('components.publicNavigation')
   <div class="py-6" x-data="datasetView()">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-      {{ $dataset }}
       <h1 class="text-3xl font-bold">{{ $dataset->title }}</h1>
       <div class="flex place-content-between py-3 border-b">
         <h2 class="text-lg font-semibold">Publisher: {{ $user->name }}</h2>
@@ -13,6 +12,25 @@
       </div>
       <div class="py-6">
         <p>{{ $dataset->description }}</p>
+      </div>
+      <div class="grid grid-cols-2 gap-2 mt-4">
+        <div>
+          <h4 class="text-lg font-semibold mb-2">Categories</h4>
+          @foreach ($categories as $category)
+            <span class="py-2 mr-2 px-2.5  bg-blue-900 text-white font-semibold">
+              <label class="text-sm">{{ $category->category }}</label>
+            </span>
+          @endforeach
+        </div>
+        <div>
+          <h4 class="text-lg font-semibold mb-2">Keywords</h4>
+          @foreach ($keywords as $keyword)
+            <span class="text-blue-900 mr-2 font-semibold">
+              <label class="text-sm">{{ $keyword->keyword }}</label>
+            </span>
+          @endforeach
+        </div>
+
       </div>
       <div class="py-6">
         <h2 class="text-2xl font-semibold">Distributions</h2>
@@ -100,7 +118,8 @@
                           style="opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:9.26041603;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.19999981;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal" />
                       </g>
                       <g id="g2242" transform="translate(556.42558,-843.56901)">
-                        <path d="m -1849.9638,-304.30968 h 41.1225 l 69.633,-108.80316 h 23.9087 41.1225" id="path1080"
+                        <path d="m -1849.9638,-304.30968 h 41.1225 l 69.633,-108.80316 h 23.9087 41.1225"
+                          id="path1080"
                           style="fill:none;stroke:#000000;stroke-width:9.26041603;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
                         <path d="m -1674.1771,-413.11286 -39.6587,-19.99314" id="path1084"
                           style="fill:none;stroke:#000000;stroke-width:9.26041603;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
@@ -680,6 +699,10 @@
           @endforeach
         </div>
       </div>
+      <button class="text-xs bg-gray-200 text-black p-1" @click="showPayload">Payload</button>
+    </div>
+    <div x-show="payload" class="p-4 whitespace-wrap bg-neutral-800 text-pink-200">
+      <code>{{ $dataset }}</code>
     </div>
   </div>
   @include('components.footer')
@@ -688,6 +711,10 @@
 <script>
   const datasetView = () => {
     const data = {
+      payload: false,
+      showPayload() {
+        this.payload = !this.payload
+      },
       parseDate(date) {
         const newDate = new Date(date);
         const result = newDate.toLocaleDateString("en-GB", { // you can use undefined as first argument
