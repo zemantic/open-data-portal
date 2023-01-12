@@ -20,6 +20,7 @@ class SearchController extends Controller
         $datasets = Dataset::where("title", "LIKE", "%" . $keyword . "%")
             ->orWhere("description", "LIKE", "%" . $keyword . "%")
             ->with("files")
+            ->with("organization")
             ->get();
 
         return view("searchResults", ["datasets" => $datasets]);

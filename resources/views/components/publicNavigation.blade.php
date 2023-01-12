@@ -22,7 +22,8 @@
         <button @click="$refs.txtSearchBox.focus()"
           class="flex items-center focus-within:border-indigo-600 flex-grow-0 flex-shrink pl-2 relative w-96 border-2 rounded-full px-1  py-1"
           type="button">
-          <form action="/search" class="w-full">
+          <form method="post" action="/search" class="w-full" enctype="application/x-www-form-urlencoded">
+            @csrf
             <input x-ref="txtSearchBox" name="keyword"
               class="block flex-grow w-full overflow-hidden bg-transparent focus:outline-none px-3 py-2"
               placeholder="Search" />

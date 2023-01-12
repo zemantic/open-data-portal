@@ -38,11 +38,19 @@
                   placeholder="A brief description about the dataset" name="description" />
               </div>
               <div class="control">
-                <x-label for="categories" :value="__('Category')" />
-                <select name="categories" class="block w-full mt-1 id="category">
-                  <option value="1">Category1</option>
-                  <option value="2">Category2</option>
-                </select>
+                <x-label for="category" :value="__('Category')" />
+                <x-select x-model="selectedCategory" x-on:change="addCategory" :options="$categories" name="category"
+                  id="category" class="w-full mt-1" />
+                <div class="my-4 flex flex-wrap space-y-1">
+                  <template x-for="category in selectedCategories" :key="category.index">
+                    <span class="py-1 mr-2 px-2 bg-blue-700 text-white font-bold">
+                      <label class="text-sm" x-text="category.value"></label>
+                      <button type="button" @click="removeCategory(category.index)"
+                        class="bg-transparent p-1">x</button>
+                    </span>
+                  </template>
+                </div>
+                <input type="text" name="categories" x-model="hiddenCategories" />
               </div>
               <div class="control">
                 <x-label for="keywords" :value="__('Keywords')" />
@@ -81,14 +89,20 @@
             </div>
             <div>
               <x-button class="font-bold">
-                {{ __('Deposit Dataset') }}
+                @if ($mode === 'create')
+                  {{ __('Deposit Dataset') }}
+                @endif
+                @if ($mode === 'patch')
+                  {{ __('Update Dataset') }}
+                @endif
               </x-button>
 
-              <x-button type="button" @click="showDelete = !showDelete"
-                class="font-bold bg-red-600 focus:bg-red-600 active:bg-red-600 hover:bg-red-500">
-                {{ __('Delete Dataset') }}
-              </x-button>
-
+              @if ($mode === 'patch')
+                <x-button type="button" @click="showDelete = !showDelete"
+                  class="font-bold bg-red-600 focus:bg-red-600 active:bg-red-600 hover:bg-red-500">
+                  {{ __('Delete Dataset') }}
+                </x-button>
+              @endif
             </div>
           </form>
 
@@ -131,13 +145,20 @@
   ]
   const fileUploadComponent = () => {
     const data = {
+      categories: [
+        @foreach ($categories as $category => $d)
+          {{ '{' . $d['value'] . ': `' . $d['valueText'] . '`}, ' }}
+        @endforeach
+      ],
+      hiddenCategories: [],
       errorMessage: "texting",
       isError: false,
       title: "",
       description: "",
       keywords: "",
-      categories: "",
       showDelete: false,
+      selectedCategory: "",
+      selectedCategories: [],
       fileList: [],
       fileuploadclick() {
         return this.$refs.fileUploadInput.click()
@@ -157,6 +178,26 @@
           style: 'decimal',
           notation: 'compact'
         }).format(fileSize)
+      },
+      addCategory() {
+        if (this.hiddenCategories.indexOf(this.selectedCategory) !== -1) {
+          return
+        }
+        if (this.selectedCategory !== "0") {
+          this.selectedCategories.push({
+            index: this.selectedCategory,
+            value: this.categories[this.selectedCategory][this.selectedCategory]
+          })
+          this.hiddenCategories.push(this.selectedCategory)
+        }
+      },
+      removeCategory(index) {
+        if (this.hiddenCategories.length !== 0) {
+          this.hiddenCategories.splice(index, 1)
+          const obj = this.selectedCategories.find(cat => cat.index === index)
+          const objIndex = this.selectedCategories.indexOf(obj)
+          this.selectedCategories.splice(objIndex, 1)
+        }
       },
       fileSelect() {
         const files = this.$refs.fileUploadInput.files

@@ -28,10 +28,13 @@ class DatasetsController extends Controller
      */
     public function create()
     {
+        if (!Auth::check()) {
+            return abort(403, "Please Login To Continue");
+        }
         $categories = Category::get();
         $category_options = [];
         array_push($category_options, [
-            "value" => null,
+            "value" => 0,
             "valueText" => "Please select category",
         ]);
         foreach ($categories as $category) {
@@ -54,6 +57,9 @@ class DatasetsController extends Controller
      */
     public function store(Request $request)
     {
+        if (!Auth::check()) {
+            return abort(403, "Forbidden");
+        }
         //
         $validated = $request->validate([
             "title" => "required",
@@ -88,7 +94,7 @@ class DatasetsController extends Controller
         $dataset->user_id = Auth::id();
         $dataset->save();
         $dataset->keywords()->attach($keyword_array);
-        $dataset->categories()->attach([$request->categories]);
+        $dataset->categories()->attach(explode(",", $request->categories));
         $dataset->save();
 
         foreach ($request->file() as $file) {
@@ -102,7 +108,7 @@ class DatasetsController extends Controller
         }
         $dataset->files()->attach($file_data_array);
         $dataset->save();
-        print $dataset->id;
+        return redirect("/datasets/" . $dataset->uuid);
     }
 
     /**
@@ -122,11 +128,15 @@ class DatasetsController extends Controller
 
         $user = $dataset->user;
         $files = $dataset->files;
+        $categories = $dataset->categories;
+        $keywords = $dataset->keywords;
 
         return view("datasetview", [
             "dataset" => $dataset,
             "user" => $user,
             "files" => $files,
+            "categories" => $categories,
+            "keywords" => $keywords,
         ]);
     }
 
@@ -138,6 +148,9 @@ class DatasetsController extends Controller
      */
     public function edit(Dataset $datasetsModel, $id)
     {
+        if (!Auth::check()) {
+            return abort(403, "Please Login To Continue");
+        }
         $dataset = Dataset::find($id);
         if ($dataset === null) {
             return abort(404);
@@ -172,6 +185,9 @@ class DatasetsController extends Controller
     public function update(Request $request, Dataset $datasetsModel)
     {
         //
+        if (!Auth::check()) {
+            return abort(403, "Please Login To Continue");
+        }
         $validated = $request->validate([
             "title" => "required",
             "description" => "required",
