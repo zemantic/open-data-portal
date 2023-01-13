@@ -50,7 +50,7 @@
                     </span>
                   </template>
                 </div>
-                <input type="text" name="categories" x-model="hiddenCategories" />
+                <input type="hidden" name="categories" x-model="hiddenCategories" />
               </div>
               <div class="control">
                 <x-label for="keywords" :value="__('Keywords')" />
