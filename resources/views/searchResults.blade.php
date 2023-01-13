@@ -21,6 +21,15 @@
               @foreach ($dataset->files as $file)
                 @if ($file->filetype === 'text/csv')
                   <span class="px-2 py-1 font-bold text-white text-sm bg-green-600">CSV</span>
+                @elseif ($file->filetype === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+                    $file->type === 'application/vnd.ms-excel')
+                  <span class="px-2 py-1 font-bold text-white text-sm bg-green-600">XSLS</span>
+                @elseif ($file->fileType === 'application/json')
+                  <span class="px-2 py-1 font-bold text-white text-sm bg-purple-700">JSON</span>
+                @elseif ($file->fileType === 'text/html')
+                  <span class="px-2 py-1 font-bold text-white text-sm bg-blue-700">HTML</span>
+                @else
+                  <span class="px-2 py-1 font-bold text-white text-sm bg-gray-600">UNKNOWN</span>
                 @endif
               @endforeach
             </div>
