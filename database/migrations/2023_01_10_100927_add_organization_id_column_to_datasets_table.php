@@ -15,7 +15,7 @@ return new class extends Migration {
     {
         Schema::table("datasets", function (Blueprint $table) {
             //
-            $table->foreignIdFor(Organization::class);
+            $table->foreignIdFor(Organization::class)->nullable();
         });
     }
 
@@ -28,6 +28,7 @@ return new class extends Migration {
     {
         Schema::table("datasets", function (Blueprint $table) {
             //
+            $table->dropColumn("organization_id");
         });
     }
 };
