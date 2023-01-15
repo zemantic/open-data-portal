@@ -178,6 +178,15 @@
               <div class="flex justify-center items-center">
                 @if ($file->filetype === 'text/csv')
                   <span class="px-2 text-white text-sm font-bold bg-green-600">CSV</span>
+                @elseif($file->filetype === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+                    $file->filetype === 'application/vnd.ms-excel')
+                  <span class="px-2 text-white text-sm font-bold bg-green-600">XLSX</span>
+                @elseif($file->filetype === 'application/json')
+                  <span class="px-2 text-white text-sm font-bold bg-purple-700">JSON</span>
+                @elseif($file->filetype === 'text/html')
+                  <span class="px-2 text-white text-sm font-bold bg-blue-700">HTML</span>
+                @else
+                  <span class="px-2 text-white text-sm font-bold bg-gray-600">UNKNOWN</span>
                 @endif
               </div>
               <div class="flex justify-center items-center">{{ $file->downloads }}</div>
