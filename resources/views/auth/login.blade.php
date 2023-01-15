@@ -1,9 +1,11 @@
 <x-guest-layout>
   <x-auth-card>
     <x-slot name="logo">
-      <a href="/">
-        <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-      </a>
+      <div class="text-gray-500 flex-col flex items-center">
+        <x-application-logo class="w-20 h-20 fill-current" />
+        <h2 class="text-xl mt-4 font-semibold">Sri Lankan Open Health Data Portal</h2>
+      </div>
+
     </x-slot>
 
     <!-- Session Status -->
