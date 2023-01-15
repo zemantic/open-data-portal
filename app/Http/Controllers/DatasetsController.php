@@ -149,7 +149,7 @@ class DatasetsController extends Controller
     public function edit(Dataset $datasetsModel, $id)
     {
         if (!Auth::check()) {
-            return abort(403, "Please Login To Continue");
+            return abort(403, "Forbidden");
         }
         $dataset = Dataset::find($id);
         if ($dataset === null) {
@@ -158,8 +158,12 @@ class DatasetsController extends Controller
 
         $categories = Category::get();
         $category_options = [];
+
+        $keywords = $dataset->keywords;
+        $files = $dataset->files;
+
         array_push($category_options, [
-            "value" => null,
+            "value" => 0,
             "valueText" => "Please select a category",
         ]);
         foreach ($categories as $category) {
@@ -172,6 +176,8 @@ class DatasetsController extends Controller
             "mode" => "patch",
             "categories" => $category_options,
             "dataset" => $dataset,
+            "keywords" => $keywords,
+            "files" => $files,
         ]);
     }
 
@@ -223,8 +229,13 @@ class DatasetsController extends Controller
      * @param  \App\Models\Dataset  $datasetsModel
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Dataset $datasetsModel)
+    public function destroy(Dataset $datasetsModel, Request $request)
     {
-        //
+        // check if user is logged in
+        if (!Auth::check()) {
+            return abort(403, "Forbidden");
+        }
+        // Delete dataset from the system
+        echo $datasetsModel->find($request->id)->get();
     }
 }

@@ -4,7 +4,7 @@
       {{ __('Dashboard') }}
     </h2>
   </x-slot>
-
+  {{ $dataset }}
   <div class="py-12">
     @if ($errors->any())
       <div class="alert alert-danger">
@@ -30,12 +30,12 @@
               <div class="control">
                 <x-label for="title" :value="__('Title')" />
                 <x-input x-model="title" id="title" class="block mt-1 w-full" type="text"
-                  placeholder="Title of the dataset" name="title" :value="old('title')" required autofocus />
+                  placeholder="Title of the dataset" name="title" :value="$dataset->title" required autofocus />
               </div>
               <div class="control">
                 <x-label for="description" :value="__('Description about the dataset')" />
                 <x-textarea x-model="description" required id="description" class="block mt-1 w-full h-56"
-                  placeholder="A brief description about the dataset" name="description" />
+                  placeholder="A brief description about the dataset" name="description" :value="$dataset->description" />
               </div>
               <div class="control">
                 <x-label for="category" :value="__('Category')" />
@@ -147,18 +147,32 @@
     const data = {
       categories: [
         @foreach ($categories as $category => $d)
-          {{ '{' . $d['value'] . ': `' . $d['valueText'] . '`}, ' }}
+          @if ($d['value'] !== 0)
+            {{ '{' . $d['value'] . ': `' . $d['valueText'] . '`}, ' }}
+          @endif
         @endforeach
       ],
-      hiddenCategories: [],
+      hiddenCategories: [
+        @foreach ($categories as $category => $d) 
+          @if ($d['value'] !== 0)
+            {{$d['value']}},
+          @endif
+        @endforeach
+    ],
       errorMessage: "texting",
       isError: false,
-      title: "",
-      description: "",
-      keywords: "",
+      title: "{{ $dataset->title ?? '' }}",
+      description: "{{ $dataset->description ?? '' }}",
+      keywords: "@foreach($keywords as $keyword => $k) {{$k['keyword']}} @endforeach",
       showDelete: false,
       selectedCategory: "",
-      selectedCategories: [],
+      selectedCategories: [
+        @foreach($categories as $category => $d)
+          @if ($d['value'] !== 0)
+            {{ '{ index :' . $d['value'] . ', value: `'. $d['valueText'] . '`},' }}
+          @endif
+        @endforeach
+      ],
       fileList: [],
       fileuploadclick() {
         return this.$refs.fileUploadInput.click()
