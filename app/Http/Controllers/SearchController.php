@@ -23,7 +23,10 @@ class SearchController extends Controller
             ->with("organization")
             ->get();
 
-        return view("searchResults", ["datasets" => $datasets]);
+        return view("searchResults", [
+            "datasets" => $datasets,
+            "keyword" => $keyword,
+        ]);
         return view("searchResults");
     }
 }
