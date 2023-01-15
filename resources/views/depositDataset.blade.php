@@ -4,25 +4,24 @@
       {{ __('Dashboard') }}
     </h2>
   </x-slot>
-  {{ $dataset }}
   <div class="py-12">
-    @if ($errors->any())
-      <div class="alert alert-danger">
-        <ul>
-          @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-          @endforeach
-        </ul>
-      </div>
-    @endif
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8" x-data="fileUploadComponent()">
       <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
         <div class="p-6 bg-white border-b border-gray-200">
-          <!-- TODO: Add notification element -->
+          @if ($errors->any())
+            <x-notification type="error">
+              <ul>
+                @foreach ($errors->all() as $error)
+                  <li>{{ $error }}</li>
+                @endforeach
+              </ul>
+
+            </x-notification>
+          @endif
           <h2 class="font-bold text-2xl">Desposit A Dataset</h2>
           <form action="/datasets/{{ $dataset->id ?? '' }}" enctype="multipart/form-data" method="post"
             class="grid grid-cols-2 gap-6 py-4">
-            @if ($mode == 'edit')
+            @if ($mode == 'patch')
               @method('PUT')
             @endif
             @csrf
@@ -30,12 +29,12 @@
               <div class="control">
                 <x-label for="title" :value="__('Title')" />
                 <x-input x-model="title" id="title" class="block mt-1 w-full" type="text"
-                  placeholder="Title of the dataset" name="title" :value="$dataset->title" required autofocus />
+                  placeholder="Title of the dataset" name="title" :value="$dataset->title ?? ''" required autofocus />
               </div>
               <div class="control">
                 <x-label for="description" :value="__('Description about the dataset')" />
                 <x-textarea x-model="description" required id="description" class="block mt-1 w-full h-56"
-                  placeholder="A brief description about the dataset" name="description" :value="$dataset->description" />
+                  placeholder="A brief description about the dataset" name="description" :value="$dataset->description ?? ''" />
               </div>
               <div class="control">
                 <x-label for="category" :value="__('Category')" />
@@ -56,6 +55,11 @@
                 <x-label for="keywords" :value="__('Keywords')" />
                 <x-input x-model="keywords" required id="keywords" class="block mt-1 w-full" type="text"
                   placeholder="Keywords seperated by comma" name="keywords" />
+              </div>
+              <div class="control">
+                <x-label for="version" :value="__('Version')" />
+                <x-input :value="$dataset->user_version ?? ''" id="version" type="text" class="block mt-1 w-full"
+                  placeholder="Dataset version" name="version" />
               </div>
             </div>
             <div class="border-4 border-gray-300 rounded-lg border-dashed flex flex-col justify-center"
@@ -124,8 +128,8 @@
             <div>
               <p class="font-bold">Are you sure to delete this dataset? <span class="text-red-700">This action cannot
                   be undone</span></p>
-              <form action="/dataset/{{ $dataset->id ?? '' }}">
-                @method('DELETE')
+              <form method="post" action="/datasets/{{ $dataset->uuid ?? '' }}">
+                @method('delete')
                 @csrf
                 <x-button class="font-bold text-xs bg-red-600 focus:bg-red-600 active:bg-red-600 hover:bg-red-500">
                   {{ __('Confirm and delete') }}
@@ -147,33 +151,41 @@
     const data = {
       categories: [
         @foreach ($categories as $category => $d)
-          @if ($d['value'] !== 0)
-            {{ '{' . $d['value'] . ': `' . $d['valueText'] . '`}, ' }}
-          @endif
+          {{ '{' . $d['value'] . ': `' . $d['valueText'] . '`}, ' }}
         @endforeach
       ],
       hiddenCategories: [
-        @foreach ($categories as $category => $d) 
-          @if ($d['value'] !== 0)
-            {{$d['value']}},
-          @endif
-        @endforeach
-    ],
+        @if ($mode == 'patch')
+          @foreach ($dataset_categories as $category => $d)
+            {{ $d['id'] }},
+          @endforeach
+        @endif
+      ],
       errorMessage: "texting",
       isError: false,
       title: "{{ $dataset->title ?? '' }}",
       description: "{{ $dataset->description ?? '' }}",
-      keywords: "@foreach($keywords as $keyword => $k) {{$k['keyword']}} @endforeach",
+      keywords: "{{ $keywords ?? null }}",
       showDelete: false,
       selectedCategory: "",
       selectedCategories: [
-        @foreach($categories as $category => $d)
-          @if ($d['value'] !== 0)
-            {{ '{ index :' . $d['value'] . ', value: `'. $d['valueText'] . '`},' }}
-          @endif
-        @endforeach
+        @if ($mode == 'patch')
+          @foreach ($dataset_categories as $category => $d)
+            {{ '{ index :' . $d['id'] . ', value: `' . $d['category'] . '`},' }}
+          @endforeach
+        @endif
       ],
-      fileList: [],
+      fileList: [
+        @if ($mode == 'patch')
+          @foreach ($dataset->files as $file => $f)
+            {
+              'fileName': `{{ $f->filepath }}`,
+              'fileType': `{{ $f->filetype }}`,
+              'fileSize': null
+            }
+          @endforeach
+        @endif
+      ],
       fileuploadclick() {
         return this.$refs.fileUploadInput.click()
       },

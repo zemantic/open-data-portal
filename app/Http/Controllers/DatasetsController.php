@@ -76,7 +76,7 @@ class DatasetsController extends Controller
             $find_keyword = Keyword::where("keyword", $value)->first();
             if ($find_keyword == null) {
                 $new_key = new Keyword();
-                $new_key->keyword = $value;
+                $new_key->keyword = trim($value);
                 $new_key->save();
                 array_push($keyword_array, $new_key->id);
             } else {
@@ -92,6 +92,7 @@ class DatasetsController extends Controller
         $dataset->description = $request->description;
         $dataset->uuid = Str::uuid();
         $dataset->user_id = Auth::id();
+        $dataset->user_version = $request->version;
         $dataset->save();
         $dataset->keywords()->attach($keyword_array);
         $dataset->categories()->attach(explode(",", $request->categories));
@@ -151,10 +152,15 @@ class DatasetsController extends Controller
         if (!Auth::check()) {
             return abort(403, "Forbidden");
         }
-        $dataset = Dataset::find($id);
+        $dataset = Dataset::where("uuid", $id)
+            ->latest()
+            ->first();
+
         if ($dataset === null) {
             return abort(404);
         }
+
+        $dataset_cagetoies = $dataset->categories;
 
         $categories = Category::get();
         $category_options = [];
@@ -172,12 +178,23 @@ class DatasetsController extends Controller
                 "valueText" => $category->category,
             ]);
         }
+
+        $keyword_string = ",";
+        foreach ($keywords as $keyword) {
+            $keyword_string .= $keyword->keyword . ",";
+        }
+
+        $keyword_string = ltrim($keyword_string, ",");
+        $keyword_string = rtrim($keyword_string, ",");
+        $keyword_string = trim($keyword_string);
+
         return view("depositDataset", [
             "mode" => "patch",
             "categories" => $category_options,
             "dataset" => $dataset,
-            "keywords" => $keywords,
+            "keywords" => $keyword_string,
             "files" => $files,
+            "dataset_categories" => $dataset_cagetoies,
         ]);
     }
 
@@ -188,12 +205,15 @@ class DatasetsController extends Controller
      * @param  \App\Models\Dataset  $datasetsModel
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Dataset $datasetsModel)
+    public function update(Request $request, Dataset $datasetsModel, $id)
     {
         //
         if (!Auth::check()) {
             return abort(403, "Please Login To Continue");
         }
+
+        $dataset = $datasetsModel::find($id);
+
         $validated = $request->validate([
             "title" => "required",
             "description" => "required",
@@ -202,25 +222,52 @@ class DatasetsController extends Controller
             "files" => "required|mimes:csv,txt,xlsx,xls,pdf,json|max:10024",
         ]);
 
+        $dataset_uuid = $dataset->uuid;
+        $dataset_sysyem_version = $dataset->system_version;
+        $dataset->delete();
         $keywords = explode(",", $request->keywords);
+        $keyword_array = [];
 
         foreach ($keywords as $key => $value) {
-            $find_keyword = Keywords::where("keyword", $value)->first();
+            $find_keyword = Keyword::where("keyword", $value)->first();
             if ($find_keyword == null) {
                 $new_key = new Keyword();
-                $new_key->keyword = $value;
+                $new_key->keyword = trim($value);
                 $new_key->save();
                 array_push($keyword_array, $new_key->id);
             } else {
                 array_push($keyword_array, $find_keyword->id);
             }
-
-            $dataset->title = $request->title;
-            $dataset->description = $request->description;
-            $dataset->keywords()->attach($keyword_array);
-            $dataset->categories()->attach([$request->categories]);
-            $dataset->save();
         }
+
+        $files = $request->files;
+        $file_data_array = [];
+
+        $dataset_new = new Dataset();
+        $dataset_new->title = $request->title;
+        $dataset_new->description = $request->description;
+        $dataset_new->uuid = $dataset_uuid;
+        $dataset_new->system_version = $dataset_sysyem_version + 1;
+        $dataset_new->user_id = Auth::id();
+        $dataset_new->user_version = $request->version;
+        $dataset_new->save();
+        $dataset_new->keywords()->attach($keyword_array);
+        $dataset_new->categories()->attach(explode(",", $request->categories));
+        $dataset_new->save();
+
+        foreach ($request->file() as $file) {
+            $path = $file->store("uploads");
+            $new_file = new File();
+            $new_file->filepath = $path;
+            $new_file->filetype = $file->getMimeType();
+            $new_file->dataset_id = $dataset->id;
+            $new_file->save();
+            array_push($file_data_array, $new_file->id);
+        }
+
+        $dataset_new->files()->attach($file_data_array);
+        $dataset_new->save();
+        return redirect("/datasets/" . $dataset_new->uuid);
     }
 
     /**
@@ -229,13 +276,18 @@ class DatasetsController extends Controller
      * @param  \App\Models\Dataset  $datasetsModel
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Dataset $datasetsModel, Request $request)
+    public function destroy(Dataset $datasetsModel, Request $request, $id)
     {
         // check if user is logged in
         if (!Auth::check()) {
             return abort(403, "Forbidden");
         }
         // Delete dataset from the system
-        echo $datasetsModel->find($request->id)->get();
+        $dataset = $datasetsModel
+            ->where("uuid", $id)
+            ->latest()
+            ->first();
+        $dataset->delete();
+        return redirect("/dashboard");
     }
 }

@@ -6,7 +6,7 @@
       <div class="flex place-content-between py-3 border-b">
         <h2 class="text-lg font-semibold">Publisher: {{ $user->name }}</h2>
         <h2 class="text-lg font-semibold">Organization: {{ $user->organization }}</h2>
-        <h2 class="text-lg font-semibold">Version</h2>
+        <h2 class="text-lg font-semibold">Version : {{ $dataset->user_version }}</h2>
         <h2 class="text-lg font-semibold">Last updated: <span x-text="parseDate('{{ $dataset->updated_at }}')"></span>
         </h2>
       </div>
