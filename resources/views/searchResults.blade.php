@@ -1,10 +1,11 @@
 <x-guest-layout>
   @include('components.publicNavigation')
   <div class="container max-w-7xl mx-auto" x-data="searchView()">
-    <div class="w-3/4 space-y-5 mt-4">
+    <div class="lg:w-3/4 lg:px-0 px-4 space-y-5 mt-4">
+      <h1 class="font-semibold text-lg">Showing results for <span class="text-blue-700">{{ $keyword }}</span></h1>
       @foreach ($datasets as $dataset)
         <div
-          class="rounded-md shadow grid grid-cols-12 border gap-4 p-6 border-l-transparent border-l-4 hover:border-l-blue-700 transition-all delay-300 transform">
+          class="rounded-md shadow block lg:grid grid-cols-12 border gap-4 p-6 border-l-transparent border-l-4 hover:border-l-blue-700 transition-all delay-300 transform">
           <div class="col-span-8">
             <a class="font-bold text-lg mb-2 hover:text-blue-800 transition-all duration-200 transform"
               href="/datasets/{{ $dataset->uuid }}">
@@ -15,7 +16,7 @@
             </p>
             <p></p>
           </div>
-          <div class="col-span-4 p-6 flex flex-col justify-evenly">
+          <div class="col-span-4 lg:p-6 mt-4 lg:mt-0 flex flex-col justify-evenly">
             <div class="space-y-4">
               <span class="font-semibold text-slate-700">{{ count($dataset->files) }} File[s]</span>
               @foreach ($dataset->files as $file)
@@ -44,9 +45,10 @@
       @endforeach
     </div>
 
-    <button class="text-xs bg-gray-200 text-black p-1" @click="showPayload">Payload</button>
-    <div x-show="payload" class="p-4 whitespace-wrap bg-neutral-800 text-pink-200">
-      <code>{{ $datasets }}</code>
+    <div class="px-4 mt-6"><button class="text-xs bg-gray-200 text-black p-1" @click="showPayload">Payload</button>
+      <div x-show="payload" class="p-4 whitespace-wrap bg-neutral-800 text-pink-200">
+        <code>{{ $datasets }}</code>
+      </div>
     </div>
   </div>
   @include('components.footer')

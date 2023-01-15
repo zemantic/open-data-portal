@@ -2,7 +2,7 @@
   <div class="bg-blue-900 py-8 px-4 md:px-0">
     <div class="container max-w-7xl mx-auto">
       <h1 class="text-3xl text-white">Offical Open Data Portal for The Ministry of Health Sri Lanka</h1>
-      <div class="mt-4 gap-4 font-bold text-white">
+      <div class="mt-4 gap-4 hidden md:block font-bold text-white">
         <ul class="md:flex items-center text-base text-white md:pt-0">
           <li><a class="inline-block no-underline font-bold px-4 lg:-ml-2" href="#">Home</a></li>
           <li><a class="inline-block no-underline font-bold px-4 lg:-ml-2" href="#">Datasets</a>
@@ -18,8 +18,8 @@
       <div class="bg-white p-8">
         <form action="/search" class="flex" method="post" enctype="application/x-www-form-urlencoded">
           @csrf
-          <input type="text" class="border-2 block w-full border-blue-800 px-3 py-2 h-12" placeholder="Search"
-            name="keyword" />
+          <input type="text" class="border-2 block w-full border-blue-800 px-3 py-2 h-12"
+            placeholder="Search datasets" name="keyword" />
           <button class="p-3 bg-blue-800 hover:bg-blue-900 h-12 w-12 fill-white flex items-center">
             <svg height="36" viewBox="0 0 48 48" width="36" xmlns="http://www.w3.org/2000/svg">
               <path
@@ -33,7 +33,7 @@
   </div>
 
   <div class="bg-white py-8" x-data="searchView()">
-    <div class="max-w-7xl text-center mx-auto grid grid-cols-3 gap-4 bg-slate-100 p-12">
+    <div class="max-w-7xl text-center mx-auto grid grid-cols-3 gap-4 bg-slate-100 px-8 py-12 lg:p-12">
       <div>
         <h1 class="text-4xl font-bold">{{ $dataset_count }}</h1>
         <h2 class="text-xl">Datasets</h2>
@@ -48,11 +48,11 @@
       </div>
     </div>
 
-    <div class="max-w-7xl space-y-4 mx-auto mt-8">
+    <div class="space-y-4 xl:max-w-6xl 2xl:max-w-7xl max-w-5xl mx-auto mt-8 px-4 md:px-0">
       <h2 class="text-2xl mb-4 font-semibold">Latest Datasets</h2>
       @foreach ($datasets as $dataset)
         <div
-          class="rounded-md shadow grid grid-cols-12 border gap-4 p-6 border-l-transparent border-l-4 hover:border-l-blue-700 transition-all delay-300 transform">
+          class="rounded-md shadow block lg:grid grid-cols-12 border gap-4 p-6 border-l-transparent border-l-4 hover:border-l-blue-700 transition-all delay-300 transform">
           <div class="col-span-8">
             <a href="/datasets/{{ $dataset->uuid }}"
               class="font-bold text-xl mb-2 hover:text-blue-800 transition-all duration-200 transform">
@@ -63,7 +63,7 @@
             </p>
             <p></p>
           </div>
-          <div class="col-span-4 p-6 flex flex-col justify-evenly">
+          <div class="col-span-4 lg:p-6 lg:m-0 mt-4 flex flex-col justify-evenly">
             <div class="space-y-4">
               <span class="font-semibold text-slate-700">{{ count($dataset->files) }} File[s]</span>
               @foreach ($dataset->files as $file)
@@ -83,8 +83,6 @@
             </div>
             <div>
               <span class="block text-ellipsis">{{ $dataset->organization->name ?? 'Unknown Organization' }}</span>
-              <span class="text-sm">Last updated: </span><span class="text-sm text-slate-600"
-                x-text="parseDate(`{{ $dataset->updated_at }}`)"></span>
             </div>
           </div>
           <div class="col-span-2"></div>

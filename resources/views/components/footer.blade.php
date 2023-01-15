@@ -1,6 +1,6 @@
-  <div class="bg-blue-900 py-16 mt-12" id="footer">
+  <div class="bg-blue-900 py-16 px-4 mt-12" id="footer">
     <div class="container mx-auto max-w-7xl">
-      <div class="grid grid-cols-3 gap-4">
+      <div class="block lg:grid grid-cols-3 gap-4">
         <div>
           <h4 class="font-bold text-white">Open Data Portal</h4>
           <p class="text-blue-300">This is the official Open Data Portal of Ministry of Health Sri Lanka</p>
