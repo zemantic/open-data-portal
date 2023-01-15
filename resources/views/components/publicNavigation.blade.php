@@ -8,7 +8,7 @@
         <h1 class="text-xl font-bold capitalize">Open data portal</h1>
       </div>
       <div class="block md:hidden">
-        <img src="/logo.png" alt="" class="h-12">
+        <x-application-logo class="w-12 h-12" />
       </div>
     </a>
   </div>
@@ -59,7 +59,7 @@
 
       <div class="flex mr-4 items-center">
         <a class="inline-block py-2 px-3 hover:bg-gray-200 rounded-full" href="#">
-          <div class="flex items-center relative cursor-pointer whitespace-nowrap">Become a host</div>
+          <div class="flex items-center relative cursor-pointer whitespace-nowrap">Desposit Dataset</div>
         </a>
         <div class="block relative">
           <button type="button" class="inline-block py-2 px-3 hover:bg-gray-200 rounded-full relative ">
